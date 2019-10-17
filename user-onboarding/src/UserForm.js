@@ -11,7 +11,6 @@ const UserForm = ({ errors, touched, values, status }) => {
 
     return (
         <div className="user-form">
-            <h1>Sign In</h1>
             <Form>
                 <Field type="text" name="name" placeholder="Name" />
                 {touched.name && errors.name && (
@@ -64,8 +63,20 @@ const FormikUserForm = withFormik({
 
     validationSchema: Yup.object().shape({
         name: Yup.string().required("Name required"),
-        email: 
-    })
-})
+        email: Yup.string().required("Email required"),
+        password: Yup.string().required("Password required")
+    }),
+
+    handleSubmit(values, {setStatus }) {
+        axios
+        .post("https://reqres.in/api/users", values)
+        .then(res => {
+            setStatus(res.data);
+            console.log(res);
+        })
+        .catch(err => console.log(err.res));
+    }
+})(UserForm);
+console.log("This is the HOC", FormikUserForm);
     
-export default UserForm
+export default FormikUserForm
